@@ -1,7 +1,7 @@
 var Sequelize = require('sequelize');
 // SQL credentials:
 // Sequelize([database name], [SQL username], [SQL password]);
-var sequelize = new Sequelize('flashMob', 'root', 'hr47');
+var sequelize = new Sequelize('flashMob', 'root', 'hi');
 
 // model definition for Sessions
 var Session = sequelize.define('Session', {
