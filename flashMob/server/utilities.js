@@ -1,7 +1,20 @@
 var User = require('./db/db').User;
 var Event = require('./db/db').Event;
+var Session = require('./db/db');
 var sequelize = require('./db/db').sequelize;
 var bcrypt = require('bcrypt');
+var Store = require('express-mysql-session')(Session);
+
+var options = {
+  host: 'localhost',
+  port: 3000,
+  user: 'root',
+  password: 'hr47',
+  database: 'flashMob'
+};
+
+var store = new Store(options);
+
 
 // hashes a plaintext input and returns hashed value
 var hashPassword = function (password, username) {
@@ -50,6 +63,25 @@ var createUser = function (req, res) {
 
 };
 
+var createSession = function (req, res) {
+
+  // creates new session with data from request body
+  Session.sync().then(function() {
+
+    return Session.create({
+
+      username: req.body.username,
+      secret: 'Purposeful_Llama_secret',
+      store: store,
+      resave: true,
+      saveUninitialized: true
+
+    });
+
+  });
+
+};
+
 module.exports.findUser = function (req, res) {
 
   // searches users table for user
@@ -62,8 +94,7 @@ module.exports.findUser = function (req, res) {
     // if user does not exist, create user
     if (users.length === 0) {
       createUser(req, res);
-      // create session (future addition)
-      res.status(303).redirect('/api/events');
+      res.send('User created');
     } else {
       res.status(400).send('Username already exists');
     }

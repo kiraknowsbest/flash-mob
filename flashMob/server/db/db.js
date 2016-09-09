@@ -3,6 +3,17 @@ var Sequelize = require('sequelize');
 // Sequelize([database name], [SQL username], [SQL password]);
 var sequelize = new Sequelize('flashMob', 'root', 'hr47');
 
+// model definition for Sessions
+var Session = sequelize.define('Session', {
+
+  username: Sequelize.STRING,
+  secret: Sequelize.STRING,
+  store: Sequelize.STRING,
+  resave: Sequelize.BOOLEAN,
+  saveUninitialized: Sequelize.BOOLEAN
+
+});
+
 // model definition for Users
 var User = sequelize.define('User', {
 
@@ -31,6 +42,9 @@ User.sync({force: true}).then(function () {
 Event.sync({force: true}).then(function () {
 });
 
+Session.sync({force: true}).then(function () {
+});
+
 sequelize.authenticate()
   .then(function(err) {
     console.log('Connection has been made successfully.');
@@ -42,3 +56,4 @@ sequelize.authenticate()
 module.exports.sequelize = sequelize;
 module.exports.User = User;
 module.exports.Event = Event;
+module.exports.Session = Session;
